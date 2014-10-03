@@ -114,7 +114,7 @@ println('Streaming started.');
 while (true) {
     try {
         $endpoint = 'statuses/filter';
-        $callback = function ($status) use ($to) {
+        $callback = function ($status) use ($to, $dir) {
             switch (true) {
                 case empty($status->extended_entities->media):
                 case isset($status->retweeted_status):
