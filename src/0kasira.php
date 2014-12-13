@@ -45,11 +45,10 @@ if (PHP_SAPI !== 'cli') {
 try {
     if (!is_file(__DIR__ . '/TwistOAuth.phar')) {
         call_user_func(function () {
-            $url = 'https://raw.githubusercontent.com/mpyw/TwistOAuth/master/build/TwistOAuth.phar';
             switch (true) {
-                case !$tmp = @fopen(__DIR__ . '/TwistOAuth.phar', 'wb'):
-                case !$fp = @fopen($url, 'rb'):
-                case !@stream_copy_to_stream($fp, $tmp):
+                case !$local = @fopen(__DIR__ . '/TwistOAuth.phar', 'wb'):
+                case !$remote = @fopen('https://raw.githubusercontent.com/mpyw/TwistOAuth/master/build/TwistOAuth.phar', 'rb'):
+                case !@stream_copy_to_stream($remote, $local):
                     $error = error_get_last();
                     throw new Exception($error['message']);
             }
