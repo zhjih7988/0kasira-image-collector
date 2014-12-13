@@ -1,8 +1,5 @@
 <?php
 
-// Load library
-require __DIR__ . '/TwistOAuth.php';
-
 // Consumer key and secret
 const CK = '3nVuSoBZnx6U4vzUxf5w';
 const CS = 'Bcs59EFbbsdF6Sl9Ng71smgStWEGwXXKSjYvPVt7qys';
@@ -41,6 +38,26 @@ function println($message = '') {
 if (PHP_SAPI !== 'cli') {
     header('Content-Type: text/plain; charset=utf-8');
     println('This script is only for CLI.');
+    exit;
+}
+
+// Quickly install and load TwistOAuth
+try {
+    if (!is_file(__DIR__ . '/TwistOAuth.phar')) {
+        call_user_func(function () {
+            $url = 'https://raw.githubusercontent.com/mpyw/TwistOAuth/master/build/TwistOAuth.phar';
+            switch (true) {
+                case !$tmp = @fopen(__DIR__ . '/TwistOAuth.phar', 'wb'):
+                case !$fp = @fopen($url, 'rb'):
+                case !@stream_copy_to_stream($fp, $tmp):
+                    $error = error_get_last();
+                    throw new Exception($error['message']);
+            }
+        });
+    }
+    require __DIR__ . '/TwistOAuth.phar';
+} catch (Exception $e) {
+    println('Failed to install TwistOAuth.');
     exit;
 }
 
